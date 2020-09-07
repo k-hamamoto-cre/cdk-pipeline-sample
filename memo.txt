@@ -1,4 +1,64 @@
+
+# AssumeRole
+/C/Users/u2012021/.aws/aws-assume-role.sh -p cdk-deployments
+　⇒cdk-deploymentsのアクセスキー等がcredientialにセットされるが、
+　　この時特殊文字などが設定されてしまい、コマンドが全然動かなくなることがある。
+　　⇒その場合はエラーが出なくなるまでassumeRoleを実行する
+
+# チュートリアル１の実行
+npx cdk bootstrap --profile cdk-deployments --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://827568229923/us-east-2
+
+# Cdkデプロイロールを削除
+# CloudFormationExecutionRoleの削除
+# ImagePublishingRoleの削除
+# FilePublishingRoleの削除
+aws iam delete-role-policy --profile cdk-deployments --role-name cdk-hnb659fds-deploy-role-827568229923-us-east-2 --policy-name default
+
+aws iam delete-role --profile cdk-deployments --role-name cdk-hnb659fds-deploy-role-827568229923-us-east-2
+aws iam detach-role-policy --profile cdk-deployments --role-name cdk-hnb659fds-cfn-exec-role-827568229923-us-east-2 --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+aws iam delete-role --profile cdk-deployments --role-name cdk-hnb659fds-cfn-exec-role-827568229923-us-east-2
+aws iam delete-role-policy --profile cdk-deployments --role-name cdk-hnb659fds-image-publishing-role-827568229923-us-east-2 --policy-name cdk-hnb659fds-image-publishing-role-default-policy-827568229923-us-east-2
+aws iam delete-role --profile cdk-deployments --role-name cdk-hnb659fds-image-publishing-role-827568229923-us-east-2
+aws iam delete-role-policy --profile cdk-deployments --role-name cdk-hnb659fds-file-publishing-role-827568229923-us-east-2 --policy-name cdk-hnb659fds-file-publishing-role-default-policy-827568229923-us-east-2
+aws iam delete-role --profile cdk-deployments --role-name cdk-hnb659fds-file-publishing-role-827568229923-us-east-2
+
+チュートリアル２の実行
+npx cdk deploy --profile cdk-deployments CdkpipelinesDemoPipelineStack
+
+
+------------------------------------
+ハマモトのgithub-token値
+8bbc2c1fb96b28ecc865268815319e458846c5f8
+
+平栗さんのgithub-token値
+02d03485238e3a0988c64e6f71243d4a9b34896e
+
+-----------------------------------------------
+  ecr:CreateRepository
+  ecr:DeleteRepository
+  kms:CreateKey
+  s3:PutBucketPublicAccessBlock
+  s3:CreateBucket
+  s3:DeleteBucketPolicy
+  s3:PutEncryptionConfiguration
+  s3:PutBucketPolicy
+  s3:DeleteBucket
+  ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+  iam:CreateRole
+  iam:AttachRolePolicy
+  iam:PutRolePolicy
+  iam:DetachRolePolicy
+  iam:DeleteRolePolicy
+  iam:GetRole
+  iam:DeleteRole
+  iam:GetRolePolicy
+=== 自分のAWS用 ===
+実行コマンド
 npx cdk bootstrap \
-  --profile default \
+  --profile cdk-deployments \
   --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess \
   aws://584441590863/us-east-2
+
+なりたいロール
+arn:aws:iam::584441590863:role/my-nprod-rbac-cdk-deployments
+
